@@ -1,0 +1,51 @@
+How am I gonna get this mf goin' 
+
+2 things:
+- What do I have on here which would be better than using google photos
+    - room creation
+    - maybe better facial matching and filters
+    - artsy fartsy stuff
+    - privacy??
+    - easier to integrate from phone(priority to figure out)
+
+What I need:
+
+- S3 -> image storage
+- EC2 machine for backend compute
+- CDN for content delivery(maybe)
+- VPCs and shit for routing??
+
+
+
+{
+    "Version": "2008-10-17",
+    "Id": "PolicyForCloudFrontPrivateContent",
+    "Statement": [
+        {
+            "Sid": "AllowCloudFrontServicePrincipal",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::monkey-man123/*",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudfront::986446886434:distribution/E21ONUKJM4FAU8"
+                }
+            }
+        },
+        {
+            "Sid": "AllowBackendWrite",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::986446886434:user/big-poppa"
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::monkey-man123/*"
+        }
+    ]
+}

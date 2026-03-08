@@ -1,0 +1,124 @@
+-- Users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    face_embedding BYTEA,  -- Store face embedding as binary
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Rooms table
+CREATE TABLE rooms (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_by INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Room members (many-to-many)
+CREATE TABLE room_members (
+    room_id INTEGER REFERENCES rooms(id),
+    user_id INTEGER REFERENCES users(id),
+    joined_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (room_id, user_id)
+);
+
+-- Images table
+CREATE TABLE images (
+    id SERIAL PRIMARY KEY,
+    room_id INTEGER REFERENCES rooms(id),
+    uploaded_by INTEGER REFERENCES users(id),
+    image_url VARCHAR(500) NOT NULL,  -- S3/Cloudinary URL
+    caption TEXT,
+    uploaded_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+---
+
+## **FastAPI Backend Structure**
+```
+backend/
+├── main.py                 # FastAPI app entry point
+├── requirements.txt        # Python dependencies
+├── .env                    # Environment variables
+│
+├── models/                 # Database models
+│   ├── __init__.py
+│   ├── user.py
+│   ├── room.py
+│   └── image.py
+│
+├── schemas/                # Pydantic schemas (request/response)
+│   ├── __init__.py
+│   ├── user.py
+│   ├── room.py
+│   └── auth.py
+│
+├── routers/                # API endpoints
+│   ├── __init__.py
+│   ├── auth.py            # Login, register, face auth
+│   ├── users.py           # User management
+│   ├── rooms.py           # Room CRUD
+│   └── images.py          # Image upload/sharing
+│
+├── services/               # Business logic
+│   ├── __init__.py
+│   ├── face_recognition.py # Your face matching code
+│   ├── auth_service.py     # JWT, password hashing
+│   └── storage.py          # S3/Cloudinary integration
+│
+├── database/
+│   ├── __init__.py
+│   └── connection.py       # PostgreSQL connection
+│
+└── utils/
+    ├── __init__.py
+    └── helpers.py
+
+
+
+        """
+        Log an event to the database
+        
+        Event Types by Category:
+        
+        AUTH:
+            - login_attempt
+            - face_login_attempt
+            - oauth_login
+            - user_registration
+            - user_logout
+            - password_changed
+            - face_enrollment
+            - face_unenrollment
+        
+        USER:
+            - profile_updated
+            - account_activated
+            - account_deactivated
+            - account_deleted
+            - account_reactivated
+        
+        ROOM:
+            - room_created
+            - room_updated
+            - room_deleted
+            - room_archived
+            - room_joined
+            - room_left
+            - member_removed
+            - member_role_changed
+        
+        IMAGE:
+            - image_uploaded
+            - image_updated
+            - image_deleted
+        
+        SECURITY:
+            - suspicious_activity
+            - multiple_failed_logins
+            - unauthorized_access_attempt
+        """

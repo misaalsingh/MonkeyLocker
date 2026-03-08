@@ -1,0 +1,17 @@
+# Face recognition
+deepface
+opencv-python
+dlib
+cv2
+
+# Hand/pose tracking
+mediapipe
+
+# Core ML/data libraries
+numpy
+pandas
+matplotlib
+scipy
+
+# Deep learning modules
+tensorflow
