@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from services.db_connection import init_db
+import models.users, models.events, models.rooms, models.images, models.imageuser  # noqa: F401 — must import before init_db
 from routers import auth, users, events, rooms, images
 
 # Initialize database
@@ -14,7 +15,7 @@ app = FastAPI(title="Face Classroom API", version="1.0.0")
 # CORS
 ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:3000,http://localhost:5173"
+    "http://localhost:3000,http://localhost:5173",
 ).split(",")
 
 app.add_middleware(
