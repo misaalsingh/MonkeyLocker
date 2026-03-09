@@ -5,7 +5,7 @@ sqlmodel
 sqlalchemy
 psycopg2-binary
 deepface
-opencv-python
+opencv-python-headless
 dlib
 mediapipe
 numpy
