@@ -4,8 +4,9 @@ python-multipart==0.0.6
 sqlmodel
 sqlalchemy
 psycopg2-binary
-deepface
 opencv-python-headless
+opencv-contrib-python-headless
+deepface
 dlib
 mediapipe
 numpy
